@@ -1,0 +1,14 @@
+{% if flashes %}
+<div class="toast-stack" aria-live="polite" aria-atomic="true">
+  {% for flash in flashes %}
+  <article class="toast toast-{{ flash.level }}" data-toast>
+    <div>
+      <strong>{{ flash.level|title }}</strong>
+      <p>{{ flash.message }}</p>
+    </div>
+    <button type="button" class="toast-close" data-dismiss-toast aria-label="Dismiss notification">×</button>
+  </article>
+  {% endfor %}
+</div>
+{% endif %}
+

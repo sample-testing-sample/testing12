@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+{% block title %}Profile | {{ app_name }}{% endblock %}
+{% block content %}
+<section class="section">
+  <div class="section-heading">
+    <span class="eyebrow">Account</span>
+    <h1>{{ current_user.username }}</h1>
+    <p>Manage your profile, password, and preferences.</p>
+  </div>
+
+  <div class="content-grid">
+    <article class="panel reveal">
+      <h2>Profile details</h2>
+      <dl class="value-list" style="margin-top:1rem;">
+        <div>
+          <dt>Username</dt>
+          <dd>{{ current_user.username }}</dd>
+        </div>
+        <div>
+          <dt>Email</dt>
+          <dd>{{ current_user.email }}</dd>
+        </div>
+        <div>
+          <dt>Role</dt>
+          <dd><span class="soft-badge">{{ current_user.role|title }}</span></dd>
+        </div>
+        <div>
+          <dt>Member since</dt>
+          <dd>{{ current_user.created_at.strftime("%B %d, %Y") }}</dd>
+        </div>
+      </dl>
+    </article>
+
+    <article class="panel panel-highlight reveal reveal-delay-1">
+      <h2>Change password</h2>
+      {% if password_errors %}
+      <div class="alert alert-error" style="margin-top:1rem;">
+        {% for error in password_errors %}
+        <p>{{ error }}</p>
+        {% endfor %}
+      </div>
+      {% endif %}
+      {% if password_success %}
+      <div class="alert" style="margin-top:1rem;background:rgba(26,122,88,0.08);border:1px solid rgba(26,122,88,0.15);color:var(--low);">
+        <p>{{ password_success }}</p>
+      </div>
+      {% endif %}
+      <form method="post" action="/profile/change-password" class="stack" style="margin-top:1rem;">
+        <label class="form-field">
+          <span>Current password</span>
+          <input type="password" name="current_password" required>
+        </label>
+        <label class="form-field">
+          <span>New password</span>
+          <input type="password" name="new_password" required minlength="8" placeholder="Min 8 chars, uppercase, lowercase, digit, special">
+        </label>
+        <label class="form-field">
+          <span>Confirm new password</span>
+          <input type="password" name="confirm_password" required minlength="8">
+        </label>
+        <button class="button button-primary" type="submit">Update password</button>
+      </form>
+    </article>
+  </div>
+
+  <div class="content-grid" style="margin-top:1.5rem;">
+    <article class="panel reveal">
+      <h2>Your stats</h2>
+      <div class="result-grid" style="margin-top:1rem;">
+        <article class="metric-card">
+          <span>Total assessments</span>
+          <strong>{{ stats.total }}</strong>
+        </article>
+        <article class="metric-card">
+          <span>Positive screens</span>
+          <strong>{{ stats.positive }}</strong>
+        </article>
+        <article class="metric-card">
+          <span>High risk</span>
+          <strong>{{ stats.high_risk }}</strong>
+        </article>
+        <article class="metric-card">
+          <span>Batch uploads</span>
+          <strong>{{ stats.uploads }}</strong>
+        </article>
+      </div>
+    </article>
+    <article class="panel panel-highlight reveal reveal-delay-1">
+      <h2>Quick actions</h2>
+      <div class="panel-actions" style="flex-direction:column;align-items:stretch;margin-top:1rem;">
+        <a class="button button-primary" href="/dashboard">Open dashboard</a>
+        <a class="button button-secondary" href="/analytics">View analytics</a>
+        <a class="button button-secondary" href="/compare">Compare assessments</a>
+        <a class="button button-ghost" href="/">Home</a>
+      </div>
+    </article>
+  </div>
+</section>
+{% endblock %}
+

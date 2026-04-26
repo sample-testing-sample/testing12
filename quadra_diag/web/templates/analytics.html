@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block title %}Analytics | {{ app_name }}{% endblock %}
+{% block content %}
+<section class="section">
+  <div class="section-heading">
+    <span class="eyebrow">Your analytics</span>
+    <h1>Screening insights</h1>
+    <p>Visualize your assessment patterns, risk trends, and disease distribution over time.</p>
+  </div>
+
+  {% if trends and trends['labels'] %}
+  <div class="content-grid" style="grid-template-columns: 1fr 1fr; margin-bottom: 2rem;">
+    <article class="panel reveal">
+      <h2>30-day trends</h2>
+      <div style="height: 280px; position: relative;">
+        <canvas id="trend-chart"></canvas>
+      </div>
+    </article>
+    <article class="panel panel-highlight reveal">
+      <h2>Disease breakdown</h2>
+      <div style="height: 280px; position: relative;">
+        <canvas id="disease-chart"></canvas>
+      </div>
+    </article>
+  </div>
+
+  <div class="content-grid" style="grid-template-columns: 1fr 1fr;">
+    <article class="panel reveal">
+      <h2>Risk distribution</h2>
+      <div style="height: 280px; position: relative;">
+        <canvas id="risk-chart"></canvas>
+      </div>
+    </article>
+    <article class="panel panel-highlight reveal">
+      <h2>Key metrics</h2>
+      <div style="display: grid; gap: 1rem; margin-top: 1rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; border-radius: var(--radius-sm); background: rgba(15,31,28,0.02); border: 1px solid rgba(15,31,28,0.04);">
+          <span>Total assessments</span>
+          <strong style="font-size: 1.5rem;">{{ trends['labels']|length }}</strong>
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; border-radius: var(--radius-sm); background: rgba(15,31,28,0.02); border: 1px solid rgba(15,31,28,0.04);">
+          <span>High-risk alerts</span>
+          <strong style="font-size: 1.5rem; color: var(--high);">{{ risk_dist['data'][2] if risk_dist and risk_dist['data']|length > 2 else 0 }}</strong>
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; border-radius: var(--radius-sm); background: rgba(15,31,28,0.02); border: 1px solid rgba(15,31,28,0.04);">
+          <span>Disease modules used</span>
+          <strong style="font-size: 1.5rem; color: var(--accent);">{{ disease_dist['labels']|length if disease_dist else 0 }}</strong>
+        </div>
+      </div>
+    </article>
+  </div>
+
+  <div id="trend-data" data-json='{{ trends|tojson }}' style="display:none;"></div>
+  <div id="disease-data" data-json='{{ disease_dist|tojson }}' style="display:none;"></div>
+  <div id="risk-data" data-json='{{ risk_dist|tojson }}' style="display:none;"></div>
+  {% else %}
+  <div class="panel reveal" style="text-align: center; padding: 3rem;">
+    <div style="font-size: 3rem; margin-bottom: 1rem;">📈</div>
+    <h2>No data yet</h2>
+    <p>Complete a few assessments to see your analytics dashboard.</p>
+    <a class="button button-primary" href="/disease/diabetes" style="margin-top: 1rem;">Start assessment</a>
+  </div>
+  {% endif %}
+</section>
+{% endblock %}
+

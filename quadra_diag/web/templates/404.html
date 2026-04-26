@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Not Found | {{ app_name }}{% endblock %}
+{% block content %}
+<section class="section" style="text-align: center; padding: 5rem 2rem;">
+  <span class="eyebrow">404</span>
+  <h1 style="margin-top: 0.5rem;">Page not found</h1>
+  <p style="max-width: 40ch; margin: 1rem auto 0;">The route you requested is not available. Return to the workspace home and continue from a known workflow.</p>
+  <div class="hero-actions" style="justify-content: center; margin-top: 1.8rem;">
+    <a class="button button-primary" href="/">Return home</a>
+    <a class="button button-secondary" href="/dashboard">Open dashboard</a>
+  </div>
+</section>
+{% endblock %}
+

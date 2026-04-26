@@ -1,0 +1,61 @@
+{
+  "disease": "diabetes",
+  "features": [
+    "Pregnancies",
+    "Glucose",
+    "BloodPressure",
+    "SkinThickness",
+    "Insulin",
+    "BMI",
+    "DiabetesPedigreeFunction",
+    "Age"
+  ],
+  "metrics": {
+    "accuracy": 0.7143,
+    "f1": 0.56,
+    "roc_auc": 0.823
+  },
+  "threshold": 0.55,
+  "stats": {
+    "Pregnancies": {
+      "median": 3.0,
+      "p25": 1.0,
+      "p75": 6.0
+    },
+    "Glucose": {
+      "median": 117.0,
+      "p25": 99.0,
+      "p75": 140.25
+    },
+    "BloodPressure": {
+      "median": 72.0,
+      "p25": 62.0,
+      "p75": 80.0
+    },
+    "SkinThickness": {
+      "median": 23.0,
+      "p25": 0.0,
+      "p75": 32.0
+    },
+    "Insulin": {
+      "median": 30.5,
+      "p25": 0.0,
+      "p75": 127.25
+    },
+    "BMI": {
+      "median": 32.0,
+      "p25": 27.3,
+      "p75": 36.6
+    },
+    "DiabetesPedigreeFunction": {
+      "median": 0.3725,
+      "p25": 0.2437,
+      "p75": 0.6262
+    },
+    "Age": {
+      "median": 29.0,
+      "p25": 24.0,
+      "p75": 41.0
+    }
+  }
+}

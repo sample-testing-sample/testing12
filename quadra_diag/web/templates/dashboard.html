@@ -1,0 +1,145 @@
+{% extends "base.html" %}
+{% block title %}Dashboard | {{ app_name }}{% endblock %}
+{% block content %}
+<section class="section">
+  <div class="section-heading">
+    <span class="eyebrow">Patient workspace</span>
+    <h1>{{ current_user.username }}'s dashboard</h1>
+    <p>Recent assessments, risk distribution, batch uploads, and interactive analytics.</p>
+  </div>
+
+  <!-- Stats Row -->
+  <div class="result-grid">
+    <article class="metric-card reveal">
+      <span>Total assessments</span>
+      <strong>{{ stats.total }}</strong>
+    </article>
+    <article class="metric-card reveal reveal-delay-1">
+      <span>Positive screens</span>
+      <strong>{{ stats.positive }}</strong>
+    </article>
+    <article class="metric-card reveal reveal-delay-2">
+      <span>High-risk results</span>
+      <strong>{{ stats.high_risk }}</strong>
+    </article>
+    <article class="metric-card reveal reveal-delay-3">
+      <span>Saved uploads</span>
+      <strong>{{ stats.uploads }}</strong>
+    </article>
+  </div>
+
+  <!-- Charts Row -->
+  <div class="content-grid" style="margin-top:1.5rem;">
+    <article class="panel reveal">
+      <h2>Risk distribution</h2>
+      <div style="height:220px;margin-top:1rem;">
+        <canvas id="risk-chart"></canvas>
+      </div>
+      <div id="risk-data" data-json='{{ risk_dist|tojson }}' style="display:none;"></div>
+    </article>
+    <article class="panel panel-highlight reveal reveal-delay-1">
+      <h2>Disease breakdown</h2>
+      <div style="height:220px;margin-top:1rem;">
+        <canvas id="disease-chart"></canvas>
+      </div>
+      <div id="disease-data" data-json='{{ disease_dist|tojson }}' style="display:none;"></div>
+    </article>
+  </div>
+
+  <!-- Trend + Batch Row -->
+  <div class="content-grid" style="margin-top:1.5rem;">
+    <article class="panel reveal">
+      <h2>Probability trends (30 days)</h2>
+      <div style="height:240px;margin-top:1rem;">
+        <canvas id="trend-chart"></canvas>
+      </div>
+      <div id="trend-data" data-json='{{ trends|tojson }}' style="display:none;"></div>
+    </article>
+    <article class="panel panel-highlight reveal reveal-delay-1">
+      <h2>Batch upload lab</h2>
+      {% if batch_error %}
+      <div class="alert alert-error">
+        <p>{{ batch_error }}</p>
+      </div>
+      {% endif %}
+      <form method="post" action="/batch-lab/diabetes" enctype="multipart/form-data" class="stack upload-form" data-no-loader>
+        <label class="form-field">
+          <span>Disease module</span>
+          <select name="disease_selector" data-disease-selector>
+            {% for key, disease in diseases.items() %}
+            <option value="{{ key }}">{{ disease.title }}</option>
+            {% endfor %}
+          </select>
+        </label>
+        <label class="upload-dropzone">
+          <input type="file" name="file" accept=".csv" required data-file-input>
+          <span class="upload-title">Drop a CSV or choose a file</span>
+          <small data-file-label>Columns must match the disease template.</small>
+        </label>
+        <div class="form-actions">
+          <button class="button button-primary" type="submit">Run batch analysis</button>
+          <a class="button button-secondary" href="/templates/diabetes/download" data-template-link>Download template</a>
+        </div>
+      </form>
+    </article>
+  </div>
+
+  <!-- History Row -->
+  <div class="content-grid" style="margin-top:1.5rem;">
+    <article class="panel reveal">
+      <h2>Recent history</h2>
+      {% if records %}
+      <div class="history-list" style="margin-top:1rem;">
+        {% for record in records %}
+        <article>
+          <strong>{{ record.disease|title }}</strong>
+          <span>{{ "%.1f"|format(record.probability * 100) }}% probability · {{ record.risk_band|title }} risk</span>
+          <small>{{ record.created_at.strftime("%b %d, %Y") }}</small>
+          <a href="/assessments/{{ record.id }}">View details</a>
+        </article>
+        {% endfor %}
+      </div>
+      {% else %}
+      <p style="margin-top:1rem;">No saved assessments yet. Run your first workflow.</p>
+      {% endif %}
+    </article>
+    <article class="panel reveal reveal-delay-1">
+      <h2>Saved batch reports</h2>
+      {% if uploads %}
+      <div class="history-list" style="margin-top:1rem;">
+        {% for report in uploads %}
+        <article>
+          <strong>{{ report.disease|title }} batch</strong>
+          <span>{{ report.total_rows }} rows · {{ report.high_risk }} high risk</span>
+          <a href="/reports/{{ report.id }}">Open report</a>
+        </article>
+        {% endfor %}
+      </div>
+      {% else %}
+      <p style="margin-top:1rem;">No upload reports yet. Use the batch lab.</p>
+      {% endif %}
+    </article>
+  </div>
+
+  <!-- Quick Links -->
+  <div class="content-grid" style="margin-top:1.5rem;">
+    <article class="panel reveal">
+      <h2>Quick actions</h2>
+      <div class="panel-actions" style="margin-top:1rem;">
+        <a href="/analytics" class="button button-primary">View Analytics →</a>
+        <a href="/compare" class="button button-secondary">Compare Assessments</a>
+      </div>
+    </article>
+    <article class="panel panel-highlight reveal reveal-delay-1">
+      <h2>Explore modules</h2>
+      <div class="panel-actions" style="margin-top:1rem;">
+        <a href="/disease/diabetes" class="button button-small button-primary">Diabetes</a>
+        <a href="/disease/heart" class="button button-small button-primary">Heart</a>
+        <a href="/disease/liver" class="button button-small button-primary">Liver</a>
+        <a href="/disease/parkinsons" class="button button-small button-primary">Parkinson's</a>
+      </div>
+    </article>
+  </div>
+</section>
+{% endblock %}
+

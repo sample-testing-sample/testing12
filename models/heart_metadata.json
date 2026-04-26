@@ -1,0 +1,91 @@
+{
+  "disease": "heart",
+  "features": [
+    "age",
+    "sex",
+    "cp",
+    "trestbps",
+    "chol",
+    "fbs",
+    "restecg",
+    "thalach",
+    "exang",
+    "oldpeak",
+    "slope",
+    "ca",
+    "thal"
+  ],
+  "metrics": {
+    "accuracy": 0.8033,
+    "f1": 0.8333,
+    "roc_auc": 0.8755
+  },
+  "threshold": 0.5,
+  "stats": {
+    "age": {
+      "median": 55.5,
+      "p25": 47.25,
+      "p75": 61.0
+    },
+    "sex": {
+      "median": 1.0,
+      "p25": 0.0,
+      "p75": 1.0
+    },
+    "cp": {
+      "median": 1.0,
+      "p25": 0.0,
+      "p75": 2.0
+    },
+    "trestbps": {
+      "median": 130.0,
+      "p25": 120.0,
+      "p75": 140.0
+    },
+    "chol": {
+      "median": 240.5,
+      "p25": 211.0,
+      "p75": 274.75
+    },
+    "fbs": {
+      "median": 0.0,
+      "p25": 0.0,
+      "p75": 0.0
+    },
+    "restecg": {
+      "median": 1.0,
+      "p25": 0.0,
+      "p75": 1.0
+    },
+    "thalach": {
+      "median": 152.5,
+      "p25": 133.25,
+      "p75": 166.0
+    },
+    "exang": {
+      "median": 0.0,
+      "p25": 0.0,
+      "p75": 1.0
+    },
+    "oldpeak": {
+      "median": 0.8,
+      "p25": 0.0,
+      "p75": 1.6
+    },
+    "slope": {
+      "median": 1.0,
+      "p25": 1.0,
+      "p75": 2.0
+    },
+    "ca": {
+      "median": 0.0,
+      "p25": 0.0,
+      "p75": 1.0
+    },
+    "thal": {
+      "median": 2.0,
+      "p25": 2.0,
+      "p75": 3.0
+    }
+  }
+}

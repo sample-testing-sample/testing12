@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="{{ 'dark' if dark_mode else '' }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="QuadraDiag — Advanced multi-disease risk assessment platform with ML explainability, batch analysis, and clinical intelligence.">
+  <meta name="theme-color" content="#0d6b52">
+  <title>{% block title %}{{ app_name }}{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('assets', path='styles.css') }}">
+  <link rel="manifest" href="/manifest.json">
+</head>
+<body>
+  <canvas id="particle-canvas"></canvas>
+  <div class="app-loader" data-app-loader hidden>
+    <div class="loader-ring"></div>
+    <p class="loader-text">Preparing your clinical workspace...</p>
+  </div>
+  <div class="page-shell">
+    {% include "components/nav.html" %}
+    {% include "components/toasts.html" %}
+    <main>
+      {% block content %}{% endblock %}
+    </main>
+    {% include "components/footer.html" %}
+  </div>
+  <dialog class="site-modal" data-modal id="disclaimer-modal">
+    <div class="modal-card">
+      <button class="modal-close" type="button" data-close-modal aria-label="Close">×</button>
+      <span class="eyebrow">Clinical disclaimer</span>
+      <h2>Use this platform for screening support, not diagnosis.</h2>
+      <p>Model outputs should be reviewed with qualified clinicians, especially when used in academic demos, pilot workflows, or batch triage scenarios.</p>
+    </div>
+  </dialog>
+  <script src="{{ url_for('assets', path='app.js') }}"></script>
+</body>
+</html>

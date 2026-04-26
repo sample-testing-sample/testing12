@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% block title %}Assessment #{{ record.id }} | {{ app_name }}{% endblock %}
+{% block content %}
+<section class="section">
+  <div class="section-heading">
+    <span class="eyebrow">{{ record.disease|title }}</span>
+    <h1>Assessment #{{ record.id }}</h1>
+    <p>{{ record.created_at.strftime("%B %d, %Y at %I:%M %p") }}</p>
+  </div>
+
+  <div class="result-hero {{ record.risk_band }} reveal">
+    <span class="eyebrow">Outcome</span>
+    <h2>{{ "Elevated risk detected" if record.predicted_positive else "Low risk pattern" }}</h2>
+    <p>{{ "Follow up with a clinician for full evaluation." if record.predicted_positive else "Continue routine monitoring." }}</p>
+    <div class="risk-gauge">
+      <span class="risk-gauge-marker" data-target="{{ (record.probability * 100)|round(0, 'floor') }}"></span>
+    </div>
+  </div>
+
+  <div class="result-grid">
+    <article class="metric-card">
+      <span>Probability</span>
+      <strong>{{ "%.1f"|format(record.probability * 100) }}%</strong>
+    </article>
+    <article class="metric-card">
+      <span>Risk band</span>
+      <strong>{{ record.risk_band|title }}</strong>
+    </article>
+    <article class="metric-card">
+      <span>Model</span>
+      <strong>{{ spec.title|default(record.disease|title) }}</strong>
+    </article>
+    <article class="metric-card">
+      <span>Threshold</span>
+      <strong>{{ "%.0f"|format(spec.threshold * 100) }}%</strong>
+    </article>
+  </div>
+
+  <div class="content-grid">
+    <article class="panel reveal">
+      <h2>Submitted values</h2>
+      <dl class="value-list">
+        {% for key, value in record.submitted_features.items() %}
+        <div>
+          <dt>{{ key }}</dt>
+          <dd>{{ value }}</dd>
+        </div>
+        {% endfor %}
+      </dl>
+    </article>
+
+    <article class="panel panel-highlight reveal">
+      <h2>Actions</h2>
+      <div class="panel-actions" style="flex-direction: column; align-items: stretch;">
+        <a class="button button-primary" href="/assessments/{{ record.id }}/pdf">Download PDF</a>
+        <a class="button button-secondary" href="/dashboard">Back to dashboard</a>
+        <a class="button button-ghost" href="/disease/{{ record.disease }}">Run new assessment</a>
+      </div>
+    </article>
+  </div>
+
+  {% if record.shap_values %}
+  <article class="panel reveal" style="margin-top: 1.2rem;">
+    <h2>Feature contributions</h2>
+    <p style="font-size: 0.85rem; color: var(--muted);">How each feature pushed the prediction higher or lower.</p>
+    <div class="shap-waterfall">
+      {% for feat, val in record.shap_values.feature_contributions.items() %}
+      <div class="shap-row {{ 'positive' if val > 0 else 'negative' }}">
+        <span style="width: 120px; font-weight: 700;">{{ feat }}</span>
+        <div class="shap-bar-bg">
+          <div class="shap-bar {{ 'positive' if val > 0 else 'negative' }}" style="width: {{ (val|abs * 20)|round(0, 'floor') }}%"></div>
+        </div>
+        <span style="width: 60px; text-align: right; font-weight: 700;">{{ "%+.4f"|format(val) }}</span>
+      </div>
+      {% endfor %}
+    </div>
+  </article>
+  {% endif %}
+</section>
+{% endblock %}
+

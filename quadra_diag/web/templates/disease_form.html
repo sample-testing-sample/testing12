@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %}{{ spec.title }} | {{ app_name }}{% endblock %}
+{% block content %}
+<section class="section">
+  <div class="section-heading">
+    <span class="eyebrow">{{ active_disease|title }}</span>
+    <h1>{{ spec.title }}</h1>
+    <p>{{ spec.description }}</p>
+  </div>
+  {% if errors %}
+  <div class="alert alert-error">
+    {% for error in errors %}
+    <p>{{ error }}</p>
+    {% endfor %}
+  </div>
+  {% endif %}
+  <div class="form-layout">
+    <form class="assessment-form panel reveal" method="post" action="/assess/{{ active_disease }}">
+      <div class="form-grid">
+        {% for field in spec.features %}
+        <label class="form-field">
+          <span>{{ field.label }}</span>
+          <input
+            type="{% if field.name == 'gender' %}text{% else %}number{% endif %}"
+            name="{{ field.name }}"
+            placeholder="{{ field.placeholder }}"
+            step="{{ field.step or 'any' }}"
+            {% if field.min %}min="{{ field.min }}"{% endif %}
+            {% if field.max %}max="{{ field.max }}"{% endif %}
+            value="{{ values.get(field.name, '') }}"
+            required
+          >
+        </label>
+        {% endfor %}
+      </div>
+      <div class="form-actions">
+        <button class="button button-primary" type="submit">Generate assessment</button>
+        <a class="button button-secondary" href="/docs">API docs</a>
+        <a class="button button-ghost" href="/templates/{{ active_disease }}/download">CSV template</a>
+      </div>
+    </form>
+    <aside class="panel panel-highlight reveal reveal-delay-1">
+      <span class="eyebrow">Notes</span>
+      <h2>What this gives you</h2>
+      <ul class="feature-list">
+        <li>Validated disease-specific inputs</li>
+        <li>Probability output and risk band</li>
+        <li>Percentile-based benchmark notes</li>
+        <li>Auto-saved to dashboard when signed in</li>
+      </ul>
+      <div class="badge-row">
+        {% for item in spec.highlights %}
+        <span class="soft-badge">{{ item }}</span>
+        {% endfor %}
+      </div>
+    </aside>
+  </div>
+</section>
+{% endblock %}
+

@@ -1,0 +1,33 @@
+<header class="site-header">
+  <a class="brand" href="/">
+    <span class="brand-mark">QD</span>
+    <span>
+      <strong>{{ app_name }}</strong>
+      <small>Clinical intelligence workspace</small>
+    </span>
+  </a>
+  <button class="nav-toggle" type="button" data-nav-toggle aria-label="Toggle navigation">
+    <span></span><span></span><span></span>
+  </button>
+  <nav class="site-nav" data-nav-menu>
+    <a href="/" {% if request.url.path == '/' %}aria-current="page"{% endif %}>Home</a>
+    <a href="/#workflows">Modules</a>
+    {% if current_user %}
+    <a href="/dashboard" {% if request.url.path == '/dashboard' %}aria-current="page"{% endif %}>Dashboard</a>
+    <a href="/analytics" {% if request.url.path == '/analytics' %}aria-current="page"{% endif %}>Analytics</a>
+    <a href="/compare" {% if request.url.path == '/compare' %}aria-current="page"{% endif %}>Compare</a>
+    {% endif %}
+    {% if is_admin %}
+    <a href="/admin" {% if request.url.path == '/admin' %}aria-current="page"{% endif %}>Admin</a>
+    {% endif %}
+    <a href="/docs">API Docs</a>
+    <button class="dark-mode-toggle" data-dark-toggle aria-label="Toggle dark mode" title="Toggle dark mode">🌙</button>
+    {% if current_user %}
+    <a href="/profile" {% if request.url.path == '/profile' %}aria-current="page"{% endif %}>Profile</a>
+    <a href="/logout">Logout</a>
+    {% else %}
+    <a href="/login">Login</a>
+    <a class="button button-small button-primary" href="/register">Sign Up</a>
+    {% endif %}
+  </nav>
+</header>

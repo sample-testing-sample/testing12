@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Batch report | {{ app_name }}{% endblock %}
+{% block content %}
+<section class="section">
+  <div class="section-heading">
+    <span class="eyebrow">Batch report</span>
+    <h1>{{ report.disease|title }} cohort analysis</h1>
+    <p>{{ report.original_filename }} processed successfully.</p>
+  </div>
+  <div class="result-grid">
+    <article class="metric-card reveal">
+      <span>Total rows</span>
+      <strong>{{ report.total_rows }}</strong>
+    </article>
+    <article class="metric-card reveal reveal-delay-1">
+      <span>Positive predictions</span>
+      <strong>{{ report.positive_predictions }}</strong>
+    </article>
+    <article class="metric-card reveal reveal-delay-2">
+      <span>High-risk rows</span>
+      <strong>{{ report.high_risk }}</strong>
+    </article>
+    <article class="metric-card reveal reveal-delay-3">
+      <span>Moderate-risk rows</span>
+      <strong>{{ report.moderate_risk }}</strong>
+    </article>
+  </div>
+  <div class="panel panel-highlight" style="margin-top:1.5rem;">
+    <h2>Next steps</h2>
+    <div class="panel-actions">
+      <a class="button button-primary" href="/reports/{{ report.id }}/download">Download CSV report</a>
+      <a class="button button-secondary" href="/reports/{{ report.id }}/download-excel">Download Excel</a>
+      <a class="button button-ghost" href="/dashboard">Return to dashboard</a>
+    </div>
+</section>
+{% endblock %}

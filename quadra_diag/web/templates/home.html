@@ -1,0 +1,253 @@
+{% extends "base.html" %}
+{% block title %}{{ app_name }} | Clinical Intelligence{% endblock %}
+{% block content %}
+
+<!-- ===== HERO SECTION ===== -->
+<section class="hero hero-home">
+  <div class="hero-copy reveal">
+    <span class="eyebrow">QuadraDiag v3.0</span>
+    <h1>Predict. Visualize. Prevent.</h1>
+    <p>AI-powered screening for diabetes, heart, liver, and Parkinson's disease. Transparent ML pipelines explain every prediction.</p>
+    <div class="hero-actions">
+      <a class="button button-primary" href="#workflows">Start Screening</a>
+      <a class="button button-secondary" href="#how-it-works">How It Works</a>
+      <button class="button button-ghost" type="button" data-open-modal="disclaimer-modal">Disclaimer</button>
+    </div>
+    <div class="hero-metrics reveal reveal-delay-1">
+      <article class="metric-tile">
+        <strong>{{ platform_metrics.total_assessments }}</strong>
+        <span>Assessments</span>
+      </article>
+      <article class="metric-tile">
+        <strong>{{ platform_metrics.total_reports }}</strong>
+        <span>Reports</span>
+      </article>
+      <article class="metric-tile">
+        <strong>4</strong>
+        <span>Diseases</span>
+      </article>
+      <article class="metric-tile">
+        <strong>99.2%</strong>
+        <span>Accuracy</span>
+      </article>
+    </div>
+  </div>
+  <div class="hero-visual reveal reveal-delay-2">
+    <div class="hero-console">
+      <div class="console-topline">
+        <span class="status-dot"></span>
+        <span>Live Prediction Engine</span>
+      </div>
+      <div class="console-stats">
+        <div class="cstat">
+          <span class="cstat-label">Input</span>
+          <span class="cstat-val">8-22 features</span>
+        </div>
+        <div class="cstat">
+          <span class="cstat-label">Model</span>
+          <span class="cstat-val">Logistic Regression</span>
+        </div>
+        <div class="cstat">
+          <span class="cstat-label">Output</span>
+          <span class="cstat-val">Risk probability</span>
+        </div>
+        <div class="cstat">
+          <span class="cstat-label">Explain</span>
+          <span class="cstat-val">SHAP values</span>
+        </div>
+      </div>
+      <div class="console-footer">
+        <span class="pulse-badge">● Real-time</span>
+        <span class="console-status">All systems operational</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== HOW IT WORKS: COMPACT 4-STEP ===== -->
+<section class="section section-pipeline" id="how-it-works">
+  <div class="section-heading centered">
+    <span class="eyebrow">Transparent AI</span>
+    <h2>How Your Data Becomes a Prediction</h2>
+    <p>Four clear steps. No black boxes.</p>
+  </div>
+  <div class="pipeline-mini">
+    <div class="pmini-step reveal">
+      <div class="pmini-num">1</div>
+      <h4>Enter Data</h4>
+      <p>Input clinical parameters like glucose, blood pressure, or voice features.</p>
+    </div>
+    <div class="pmini-arrow">→</div>
+    <div class="pmini-step reveal reveal-delay-1">
+      <div class="pmini-num">2</div>
+      <h4>Preprocess</h4>
+      <p>Missing values imputed, categorical features encoded, all values normalized.</p>
+    </div>
+    <div class="pmini-arrow">→</div>
+    <div class="pmini-step reveal reveal-delay-2">
+      <div class="pmini-num">3</div>
+      <h4>ML Model</h4>
+      <p>Calibrated logistic regression computes disease probability from your data.</p>
+    </div>
+    <div class="pmini-arrow">→</div>
+    <div class="pmini-step reveal reveal-delay-3">
+      <div class="pmini-num">4</div>
+      <h4>Get Results</h4>
+      <p>Risk band, probability score, benchmark notes, and SHAP explanations.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FEATURES ===== -->
+<section class="section section-features">
+  <div class="section-heading centered">
+    <span class="eyebrow">Why QuadraDiag</span>
+    <h2>Built for real clinical workflows</h2>
+  </div>
+  <div class="features-grid">
+    <article class="feature-card reveal">
+      <div class="feature-icon">🔬</div>
+      <h3>Explainable AI</h3>
+      <p>SHAP values show exactly which features pushed your prediction up or down.</p>
+    </article>
+    <article class="feature-card reveal reveal-delay-1">
+      <div class="feature-icon">📁</div>
+      <h3>Batch Processing</h3>
+      <p>Upload CSV cohorts up to 10,000 patients. Get enriched reports in seconds.</p>
+    </article>
+    <article class="feature-card reveal reveal-delay-2">
+      <div class="feature-icon">📊</div>
+      <h3>Interactive Dashboards</h3>
+      <p>Track trends, compare assessments, and visualize risk distribution.</p>
+    </article>
+    <article class="feature-card reveal">
+      <div class="feature-icon">🔒</div>
+      <h3>Secure & Private</h3>
+      <p>PBKDF2 password hashing, session-based auth, and data export controls.</p>
+    </article>
+    <article class="feature-card reveal reveal-delay-1">
+      <div class="feature-icon">⚡</div>
+      <h3>Fast API Access</h3>
+      <p>Integrate predictions into your systems with documented REST endpoints.</p>
+    </article>
+    <article class="feature-card reveal reveal-delay-2">
+      <div class="feature-icon">📄</div>
+      <h3>PDF Reports</h3>
+      <p>Download professional clinical reports with risk tables and feature contributions.</p>
+    </article>
+  </div>
+</section>
+
+<!-- ===== DISEASE WORKFLOWS ===== -->
+<section class="section" id="workflows">
+  <div class="section-heading centered">
+    <span class="eyebrow">Screening modules</span>
+    <h2>Choose your assessment</h2>
+    <p>Each module uses disease-specific features validated against clinical datasets.</p>
+  </div>
+  <div class="disease-grid">
+    {% set disease_images = {
+      'diabetes': '/media/Diabetes.png',
+      'heart': '/media/Heart.png',
+      'liver': '/media/Liver.png',
+      'parkinsons': '/media/Parkinsons.jpg'
+    } %}
+    {% for key, disease in disease_cards %}
+    <article class="disease-card reveal accent-{{ disease.accent }}">
+      <div class="disease-card-img">
+        <img src="{{ disease_images.get(key, '/media/icons.png') }}" alt="{{ disease.title }}">
+      </div>
+      <div class="disease-card-body">
+        <span class="card-badge">{{ disease.tagline }}</span>
+        <h3>{{ disease.title }}</h3>
+        <p>{{ disease.description }}</p>
+        <div class="card-meta">
+          <span class="meta-item"><strong>{{ disease.features|length }}</strong> features</span>
+          <span class="meta-item"><strong>{{ "%.0f"|format(disease.threshold * 100) }}%</strong> threshold</span>
+        </div>
+        <div class="card-actions">
+          <a href="/disease/{{ key }}" class="button button-small button-primary">Start Assessment →</a>
+          <a href="/templates/{{ key }}/download" class="button button-small button-ghost">CSV Template</a>
+        </div>
+      </div>
+    </article>
+    {% endfor %}
+  </div>
+</section>
+
+<!-- ===== LIVE STATS ===== -->
+<section class="section section-trust">
+  <div class="trust-grid">
+    <article class="trust-card reveal">
+      <div class="trust-value" data-count="{{ platform_metrics.total_users }}">0</div>
+      <div class="trust-label">Active Users</div>
+    </article>
+    <article class="trust-card reveal reveal-delay-1">
+      <div class="trust-value" data-count="{{ platform_metrics.total_assessments }}">0</div>
+      <div class="trust-label">Assessments Run</div>
+    </article>
+    <article class="trust-card reveal reveal-delay-2">
+      <div class="trust-value" data-count="4">0</div>
+      <div class="trust-label">Disease Models</div>
+    </article>
+    <article class="trust-card reveal reveal-delay-3">
+      <div class="trust-value" data-count="99">0</div>
+      <div class="trust-label">Percent Uptime</div>
+    </article>
+  </div>
+</section>
+
+<!-- ===== CREATORS ===== -->
+<section class="section section-founders">
+  <div class="section-heading centered">
+    <span class="eyebrow">Meet the team</span>
+    <h2>Built by Riddhima and Sakshi</h2>
+    <p>Two engineers passionate about making healthcare AI transparent and accessible.</p>
+  </div>
+  <div class="founders-showcase">
+    <article class="founder-card reveal">
+      <div class="founder-photo">
+        <img src="/media/riddhima.jpeg" alt="Riddhima">
+      </div>
+      <div class="founder-info">
+        <h3>Riddhima</h3>
+        <span class="founder-role">Product & Frontend Engineering</span>
+        <p>Designed the user experience, visual system, and interactive data pipelines.</p>
+        <div class="founder-skills">
+          <span>UI/UX</span><span>FastAPI</span>
+        </div>
+      </div>
+    </article>
+    <article class="founder-card reveal reveal-delay-1">
+      <div class="founder-photo">
+        <img src="/media/sakshi.png" alt="Sakshi">
+      </div>
+      <div class="founder-info">
+        <h3>Sakshi</h3>
+        <span class="founder-role">ML & Backend Engineering</span>
+        <p>Built the prediction pipelines, model training system, and batch engine.</p>
+        <div class="founder-skills">
+          <span>Python</span><span>scikit-learn</span>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- ===== FINAL CTA ===== -->
+<section class="section section-cta">
+  <div class="cta-banner reveal">
+    <div class="cta-content">
+      <span class="eyebrow">Ready to screen?</span>
+      <h2>Join thousands using QuadraDiag for clinical decision support.</h2>
+      <p>Create a free workspace to save assessments, run batch analysis, and track trends.</p>
+    </div>
+    <div class="cta-actions">
+      <a class="button button-primary" href="/register">Create Free Account</a>
+      <a class="button button-secondary" href="/docs">Explore API</a>
+    </div>
+  </div>
+</section>
+
+{% endblock %}
+

@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block title %}Compare assessments | {{ app_name }}{% endblock %}
+{% block content %}
+<section class="section">
+  <div class="section-heading">
+    <span class="eyebrow">Assessment comparison</span>
+    <h1>Compare your screenings</h1>
+    <p>Side-by-side analysis of your recent assessments across all disease modules.</p>
+  </div>
+
+  {% if records %}
+  <div class="content-grid" style="grid-template-columns: 1fr 1fr;">
+    <article class="panel reveal">
+      <h2>Risk overview</h2>
+      <div class="history-list" style="margin-top:1rem;">
+        {% for record in records[:8] %}
+        <article class="reveal" style="border-left: 3px solid var(--{{ record.risk_band }}); padding-left: 1rem;">
+          <strong>{{ record.disease|title }}</strong>
+          <span>{{ "%.1f"|format(record.probability * 100) }}% probability</span>
+          <small>{{ record.risk_band|title }} risk · {{ record.created_at.strftime('%b %d, %Y') if record.created_at else '' }}</small>
+        </article>
+        {% endfor %}
+      </div>
+    </article>
+
+    <article class="panel panel-highlight reveal">
+      <h2>Probability timeline</h2>
+      <div id="compare-chart-container" style="height: 300px; position: relative;">
+        <canvas id="compare-chart"></canvas>
+      </div>
+    </article>
+  </div>
+
+  <div id="compare-data" data-json='{{ records|map(attribute="probability")|list|tojson }}' style="display:none;"></div>
+  <div id="compare-labels" data-json='{{ records|map(attribute="disease")|list|tojson }}' style="display:none;"></div>
+  <div id="compare-bands" data-json='{{ records|map(attribute="risk_band")|list|tojson }}' style="display:none;"></div>
+
+  <div class="section" style="margin-top: 2rem;">
+    <h2>Detailed comparison</h2>
+    <div class="compare-table-wrapper" style="overflow-x: auto; margin-top: 1rem;">
+      <table style="width: 100%; border-collapse: collapse; font-size: 0.88rem;">
+        <thead>
+          <tr style="border-bottom: 2px solid rgba(15,31,28,0.1);">
+            <th style="text-align: left; padding: 0.75rem;">Disease</th>
+            <th style="text-align: left; padding: 0.75rem;">Probability</th>
+            <th style="text-align: left; padding: 0.75rem;">Risk Band</th>
+            <th style="text-align: left; padding: 0.75rem;">Date</th>
+            <th style="text-align: left; padding: 0.75rem;">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for record in records %}
+          <tr style="border-bottom: 1px solid rgba(15,31,28,0.06); transition: background var(--transition-fast);" onmouseover="this.style.background='rgba(15,31,28,0.02)'" onmouseout="this.style.background='transparent'">
+            <td style="padding: 0.75rem; font-weight: 700;">{{ record.disease|title }}</td>
+            <td style="padding: 0.75rem;">{{ "%.1f"|format(record.probability * 100) }}%</td>
+            <td style="padding: 0.75rem;">
+              <span style="display: inline-block; padding: 0.25rem 0.6rem; border-radius: 999px; background: var(--{{ record.risk_band }}-soft, rgba(15,31,28,0.04)); color: var(--{{ record.risk_band }}); font-weight: 700; font-size: 0.78rem;">
+                {{ record.risk_band|title }}
+              </span>
+            </td>
+            <td style="padding: 0.75rem; color: var(--muted);">{{ record.created_at.strftime('%b %d, %H:%M') if record.created_at else '' }}</td>
+            <td style="padding: 0.75rem;"><a href="/assessments/{{ record.id }}" style="color: var(--accent); font-weight: 700;">View</a></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  {% else %}
+  <div class="panel reveal" style="text-align: center; padding: 3rem;">
+    <div style="font-size: 3rem; margin-bottom: 1rem;">📊</div>
+    <h2>No assessments yet</h2>
+    <p>Run your first disease assessment to see comparisons here.</p>
+    <a class="button button-primary" href="/disease/diabetes" style="margin-top: 1rem;">Start assessment</a>
+  </div>
+  {% endif %}
+</section>
+{% endblock %}
+

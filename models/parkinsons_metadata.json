@@ -1,0 +1,145 @@
+{
+  "disease": "parkinsons",
+  "features": [
+    "MDVP_Fo",
+    "MDVP_Fhi",
+    "MDVP_Flo",
+    "Jitter",
+    "Jitter_Abs",
+    "MDVP_RAP",
+    "MDVP_PPQ",
+    "Jitter_DDP",
+    "MDVP_Shimmer",
+    "MDVP_Shimmer_dB",
+    "Shimmer_APQ3",
+    "Shimmer_APQ5",
+    "MDVP_APQ",
+    "Shimmer_DDA",
+    "NHR",
+    "HNR",
+    "RPDE",
+    "DFA",
+    "spread1",
+    "spread2",
+    "D2",
+    "PPE"
+  ],
+  "metrics": {
+    "accuracy": 0.9231,
+    "f1": 0.9492,
+    "roc_auc": 0.9241
+  },
+  "threshold": 0.55,
+  "stats": {
+    "MDVP_Fo": {
+      "median": 148.79,
+      "p25": 117.572,
+      "p75": 182.769
+    },
+    "MDVP_Fhi": {
+      "median": 175.829,
+      "p25": 134.8625,
+      "p75": 224.2055
+    },
+    "MDVP_Flo": {
+      "median": 104.315,
+      "p25": 84.291,
+      "p75": 140.0185
+    },
+    "Jitter": {
+      "median": 0.0049,
+      "p25": 0.0035,
+      "p75": 0.0074
+    },
+    "Jitter_Abs": {
+      "median": 0.0,
+      "p25": 0.0,
+      "p75": 0.0001
+    },
+    "MDVP_RAP": {
+      "median": 0.0025,
+      "p25": 0.0017,
+      "p75": 0.0038
+    },
+    "MDVP_PPQ": {
+      "median": 0.0027,
+      "p25": 0.0019,
+      "p75": 0.004
+    },
+    "Jitter_DDP": {
+      "median": 0.0075,
+      "p25": 0.005,
+      "p75": 0.0115
+    },
+    "MDVP_Shimmer": {
+      "median": 0.023,
+      "p25": 0.0165,
+      "p75": 0.0379
+    },
+    "MDVP_Shimmer_dB": {
+      "median": 0.221,
+      "p25": 0.1485,
+      "p75": 0.35
+    },
+    "Shimmer_APQ3": {
+      "median": 0.0128,
+      "p25": 0.0082,
+      "p75": 0.0203
+    },
+    "Shimmer_APQ5": {
+      "median": 0.0135,
+      "p25": 0.0096,
+      "p75": 0.0224
+    },
+    "MDVP_APQ": {
+      "median": 0.0183,
+      "p25": 0.0131,
+      "p75": 0.0294
+    },
+    "Shimmer_DDA": {
+      "median": 0.0384,
+      "p25": 0.0247,
+      "p75": 0.0608
+    },
+    "NHR": {
+      "median": 0.0117,
+      "p25": 0.0059,
+      "p75": 0.0256
+    },
+    "HNR": {
+      "median": 22.085,
+      "p25": 19.198,
+      "p75": 25.0755
+    },
+    "RPDE": {
+      "median": 0.496,
+      "p25": 0.4213,
+      "p75": 0.5876
+    },
+    "DFA": {
+      "median": 0.7223,
+      "p25": 0.6748,
+      "p75": 0.7619
+    },
+    "spread1": {
+      "median": -5.7209,
+      "p25": -6.4501,
+      "p75": -5.0462
+    },
+    "spread2": {
+      "median": 0.2189,
+      "p25": 0.1744,
+      "p75": 0.2792
+    },
+    "D2": {
+      "median": 2.3615,
+      "p25": 2.0991,
+      "p75": 2.6365
+    },
+    "PPE": {
+      "median": 0.1941,
+      "p25": 0.1375,
+      "p75": 0.253
+    }
+  }
+}

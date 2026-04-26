@@ -1,0 +1,1 @@
+"""QuadraDiag application package."""

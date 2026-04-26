@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}{% if mode == 'register' %}Create account{% else %}Login{% endif %} | {{ app_name }}{% endblock %}
+{% block content %}
+<section class="section auth-shell">
+  <div class="auth-stage">
+    <div class="auth-card reveal">
+      <span class="eyebrow">{% if mode == 'register' %}Create account{% else %}Welcome back{% endif %}</span>
+      <h1>{% if mode == 'register' %}New workspace{% else %}Sign in{% endif %}</h1>
+      {% if errors %}
+      <div class="alert alert-error" style="margin-top:1rem;">
+        {% for error in errors %}
+        <p>{{ error }}</p>
+        {% endfor %}
+      </div>
+      {% endif %}
+      <form method="post" action="/{{ mode }}" class="stack" style="margin-top: 1.2rem;">
+        {% if mode == 'register' %}
+        <label class="form-field">
+          <span>Username</span>
+          <input type="text" name="username" required minlength="3" placeholder="Your username">
+        </label>
+        {% endif %}
+        <label class="form-field">
+          <span>Email</span>
+          <input type="email" name="email" required placeholder="you@example.com">
+        </label>
+        <label class="form-field">
+          <span>Password</span>
+          <input type="password" name="password" required minlength="8" placeholder="Min 8 chars, uppercase, lowercase, digit, special">
+        </label>
+        {% if mode == 'register' %}
+        <label class="form-field">
+          <span>Account type</span>
+          <select name="role">
+            <option value="patient" selected>Patient</option>
+            <option value="clinician">Clinician</option>
+          </select>
+        </label>
+        {% endif %}
+        <button class="button button-primary" type="submit">{% if mode == 'register' %}Create account{% else %}Login{% endif %}</button>
+      </form>
+      <p style="margin-top:1rem;font-size:0.85rem;">
+        {% if mode == 'register' %}
+        Already have an account? <a href="/login" style="color:var(--accent);font-weight:700;">Sign in</a>
+        {% else %}
+        Need an account? <a href="/register" style="color:var(--accent);font-weight:700;">Create one</a>
+        {% endif %}
+      </p>
+    </div>
+    <aside class="panel panel-highlight reveal reveal-delay-1 auth-aside">
+      <span class="eyebrow">Why sign in</span>
+      <h2>Workspace benefits</h2>
+      <ul class="feature-list" style="margin-top: 1rem;">
+        <li>Save assessments to your dashboard</li>
+        <li>Run batch CSV uploads and download reports</li>
+        <li>Track activity and risk distribution</li>
+        <li>Download PDF reports for each assessment</li>
+        <li>Compare assessments side-by-side</li>
+        <li>Interactive analytics with Chart.js</li>
+      </ul>
+    </aside>
+  </div>
+</section>
+{% endblock %}
+
