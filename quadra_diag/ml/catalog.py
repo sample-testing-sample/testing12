@@ -118,6 +118,21 @@ DISEASE_SPECS = {
         "tagline": "Neurological voice analysis",
         "accent": "indigo",
     },
+    "mri": {
+        "title": "MRI Analysis",
+        "description": "Advanced brain connectivity and white matter analysis using NeuroTract.",
+        "tagline": "Neuroimaging & brain mapping",
+        "accent": "violet",
+        "is_imaging_module": True,
+        "external_api": "http://localhost:8001",
+        "features": [],
+        "highlights": [],
+        "threshold": 0.0,
+        "positive_label": 0,
+        "dataset": "",
+        "model_file": "",
+        "metadata_file": "",
+    },
 }
 
 for disease_name, spec in DISEASE_SPECS.items():

@@ -1,0 +1,328 @@
+{% extends "base.html" %}
+
+{% block title %}{{ spec.title }} - {{ app_name }}{% endblock %}
+
+{% block content %}
+<style>
+  .mri-container {
+    max-width: 1400px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+  }
+
+  .mri-header {
+    margin-bottom: 2rem;
+    border-bottom: 2px solid var(--color-violet);
+    padding-bottom: 1rem;
+  }
+
+  .mri-header h1 {
+    font-size: 2rem;
+    color: var(--color-violet);
+    margin: 0 0 0.5rem 0;
+  }
+
+  .mri-header p {
+    color: var(--text-secondary);
+    margin: 0;
+  }
+
+  .mri-frame {
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    overflow: hidden;
+    background: var(--bg-secondary);
+    margin-top: 1rem;
+    min-height: 600px;
+  }
+
+  .mri-status {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem;
+    background: var(--bg-tertiary);
+    border-radius: 8px;
+    margin-bottom: 1rem;
+  }
+
+  .status-indicator {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+
+  .status-indicator.active {
+    background-color: var(--color-emerald);
+  }
+
+  .status-indicator.inactive {
+    background-color: var(--color-gray-400);
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
+
+  .controls {
+    display: flex;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .button-group {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .iframe-wrapper {
+    position: relative;
+    width: 100%;
+    padding-bottom: 56.25%; /* 16:9 */
+    height: 0;
+    overflow: hidden;
+    background: var(--bg-primary);
+  }
+
+  .iframe-wrapper iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+
+  .loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 400px;
+    color: var(--text-secondary);
+  }
+
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+    margin: 1rem 0;
+  }
+
+  .feature-card {
+    padding: 1rem;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    text-align: center;
+  }
+
+  .feature-icon {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .feature-title {
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+  }
+
+  .feature-desc {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+  }
+
+  .documentation {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background: var(--bg-tertiary);
+    border-radius: 8px;
+    border-left: 4px solid var(--color-violet);
+  }
+
+  .documentation h3 {
+    margin-top: 0;
+    color: var(--color-violet);
+  }
+
+  .documentation ul {
+    margin: 0.5rem 0;
+    padding-left: 1.25rem;
+  }
+
+  .documentation li {
+    margin: 0.25rem 0;
+  }
+</style>
+
+<div class="mri-container">
+  <div class="mri-header">
+    <h1>🧠 {{ spec.title }}</h1>
+    <p>{{ spec.description }}</p>
+  </div>
+
+  <div class="mri-status">
+    <span class="status-indicator active" id="neurotract-status"></span>
+    <span id="status-text">NeuroTract Backend: Checking...</span>
+  </div>
+
+  <div class="controls">
+    <button class="button button-primary" onclick="openNeuroTractInterface()">
+      📊 Open NeuroTract Interface
+    </button>
+    <button class="button" onclick="showDocumentation()">
+      📚 Documentation
+    </button>
+    <button class="button" onclick="checkNeuroTractStatus()">
+      🔄 Refresh Status
+    </button>
+  </div>
+
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feature-icon">🔬</div>
+      <div class="feature-title">Data Processing</div>
+      <div class="feature-desc">7-stage MRI pipeline with preprocessing, DTI, CSD, and tractography</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🧮</div>
+      <div class="feature-title">Connectivity Analysis</div>
+      <div class="feature-desc">Structural connectome construction with graph metrics</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">📈</div>
+      <div class="feature-title">Interactive Visualization</div>
+      <div class="feature-desc">3D brain visualization with Three.js and white matter fiber display</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">📋</div>
+      <div class="feature-title">Clinical Reports</div>
+      <div class="feature-desc">Quantitative metrics and interpretations for clinical workflows</div>
+    </div>
+  </div>
+
+  <div id="mri-interface" class="mri-frame" style="display: none;">
+    <div class="loading">
+      <p>Loading NeuroTract Interface...</p>
+    </div>
+  </div>
+
+  <div id="documentation" class="documentation" style="display: none;">
+    <h3>NeuroTract: Brain White Matter Analysis</h3>
+    <p>NeuroTract processes diffusion MRI data to analyze brain white matter connectivity. The platform provides:</p>
+    
+    <h4>Processing Pipeline</h4>
+    <ul>
+      <li><strong>Stage 1:</strong> Data Ingestion - Validates NIfTI files and gradient tables</li>
+      <li><strong>Stage 2:</strong> Preprocessing - Motion correction, brain extraction, bias field correction</li>
+      <li><strong>Stage 3:</strong> Microstructure Modeling - DTI and CSD analysis</li>
+      <li><strong>Stage 4:</strong> Tractography - Probabilistic fiber tracking</li>
+      <li><strong>Stage 5:</strong> Surface Generation - Brain mesh and parcellation mapping</li>
+      <li><strong>Stage 6:</strong> Connectome Construction - Graph representation of brain connectivity</li>
+      <li><strong>Stage 7:</strong> Graph Analysis - Network metrics and statistics</li>
+    </ul>
+
+    <h4>Input Requirements</h4>
+    <ul>
+      <li><strong>DWI File:</strong> Diffusion-weighted NIfTI image (.nii.gz)</li>
+      <li><strong>B-values:</strong> Text file with diffusion weighting strengths</li>
+      <li><strong>B-vectors:</strong> Text file with gradient directions</li>
+      <li><strong>Optional:</strong> T1-weighted anatomical scan, brain mask, parcellation atlas</li>
+    </ul>
+
+    <h4>Output Metrics</h4>
+    <ul>
+      <li>Fractional Anisotropy (FA) - Directional diffusion measure</li>
+      <li>Mean Diffusivity (MD) - Average water diffusion</li>
+      <li>Connectivity Matrix - Brain region connectivity strengths</li>
+      <li>Graph Metrics - Network properties (clustering, modularity, centrality)</li>
+    </ul>
+
+    <h4>Getting Started</h4>
+    <p>To use NeuroTract:</p>
+    <ol>
+      <li>Prepare your MRI data in BIDS format or provide file paths directly</li>
+      <li>Click "Open NeuroTract Interface" to access the web platform</li>
+      <li>Upload your data and configure processing parameters</li>
+      <li>Monitor processing progress in real-time</li>
+      <li>Review results with interactive 3D visualizations</li>
+      <li>Export metrics for clinical interpretation</li>
+    </ol>
+
+    <h4>For More Information</h4>
+    <ul>
+      <li><a href="{{ neurotract_backend }}/docs" target="_blank">NeuroTract API Documentation</a></li>
+      <li><a href="{{ neurotract_frontend }}" target="_blank">NeuroTract Web Interface</a></li>
+      <li><a href="/docs" target="_blank">QuadraDiag Integration API</a></li>
+    </ul>
+  </div>
+</div>
+
+<script>
+  // Check NeuroTract backend status
+  async function checkNeuroTractStatus() {
+    const statusEl = document.getElementById('status-text');
+    const indicatorEl = document.getElementById('neurotract-status');
+
+    try {
+      const response = await fetch('/mri/proxy/health', {
+        method: 'GET'
+      });
+
+      if (response.ok) {
+        statusEl.textContent = '✓ NeuroTract Backend: Online';
+        indicatorEl.className = 'status-indicator active';
+        return true;
+      }
+    } catch (e) {
+      console.error(e);
+    }
+
+    statusEl.textContent = '✗ NeuroTract Backend: Offline';
+    indicatorEl.className = 'status-indicator inactive';
+    return false;
+  }
+
+  // Open NeuroTract interface
+  function openNeuroTractInterface() {
+    const mriInterface = document.getElementById('mri-interface');
+    const documentation = document.getElementById('documentation');
+    
+    documentation.style.display = 'none';
+    mriInterface.style.display = 'block';
+    
+    // Create iframe if not exists
+    if (!mriInterface.querySelector('iframe')) {
+      const iframe = document.createElement('div');
+      iframe.className = 'iframe-wrapper';
+      iframe.innerHTML = `
+        <iframe src="{{ neurotract_frontend }}" 
+                title="NeuroTract Interface"
+                allow="camera *; microphone *; geolocation *;">
+        </iframe>
+      `;
+      mriInterface.innerHTML = '';
+      mriInterface.appendChild(iframe);
+    }
+  }
+
+  // Show documentation
+  function showDocumentation() {
+    const documentation = document.getElementById('documentation');
+    const mriInterface = document.getElementById('mri-interface');
+    
+    mriInterface.style.display = 'none';
+    documentation.style.display = 'block';
+  }
+
+  // Initialize status check on page load
+  window.addEventListener('DOMContentLoaded', () => {
+    checkNeuroTractStatus();
+    // Check status every 30 seconds
+    setInterval(checkNeuroTractStatus, 30000);
+  });
+</script>
+{% endblock %}

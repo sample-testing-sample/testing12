@@ -16,6 +16,7 @@
     <a href="/dashboard" {% if request.url.path == '/dashboard' %}aria-current="page"{% endif %}>Dashboard</a>
     <a href="/analytics" {% if request.url.path == '/analytics' %}aria-current="page"{% endif %}>Analytics</a>
     <a href="/compare" {% if request.url.path == '/compare' %}aria-current="page"{% endif %}>Compare</a>
+    <a href="/mri" {% if request.url.path == '/mri' %}aria-current="page"{% endif %} class="button button-small button-accent">MRI Analysis</a>
     {% endif %}
     {% if is_admin %}
     <a href="/admin" {% if request.url.path == '/admin' %}aria-current="page"{% endif %}>Admin</a>

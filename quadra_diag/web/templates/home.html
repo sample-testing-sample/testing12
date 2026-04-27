@@ -23,8 +23,8 @@
         <span>Reports</span>
       </article>
       <article class="metric-tile">
-        <strong>4</strong>
-        <span>Diseases</span>
+        <strong>5</strong>
+        <span>Features</span>
       </article>
       <article class="metric-tile">
         <strong>99.2%</strong>
@@ -150,7 +150,8 @@
       'diabetes': '/media/Diabetes.png',
       'heart': '/media/Heart.png',
       'liver': '/media/Liver.png',
-      'parkinsons': '/media/Parkinsons.jpg'
+      'parkinsons': '/media/Parkinsons.jpg',
+      'mri': '/media/icons.png'
     } %}
     {% for key, disease in disease_cards %}
     <article class="disease-card reveal accent-{{ disease.accent }}">
@@ -161,6 +162,16 @@
         <span class="card-badge">{{ disease.tagline }}</span>
         <h3>{{ disease.title }}</h3>
         <p>{{ disease.description }}</p>
+        {% if disease.is_imaging_module %}
+        <div class="card-meta">
+          <span class="meta-item">🆕 <strong>New Feature</strong></span>
+          <span class="meta-item"><strong>Next-Gen</strong> imaging</span>
+        </div>
+        <div class="card-actions">
+          <a href="/mri" class="button button-small button-primary">Access NeuroTract →</a>
+          <a href="http://localhost:8001/docs" class="button button-small button-ghost" target="_blank">API Docs</a>
+        </div>
+        {% else %}
         <div class="card-meta">
           <span class="meta-item"><strong>{{ disease.features|length }}</strong> features</span>
           <span class="meta-item"><strong>{{ "%.0f"|format(disease.threshold * 100) }}%</strong> threshold</span>
@@ -169,6 +180,7 @@
           <a href="/disease/{{ key }}" class="button button-small button-primary">Start Assessment →</a>
           <a href="/templates/{{ key }}/download" class="button button-small button-ghost">CSV Template</a>
         </div>
+        {% endif %}
       </div>
     </article>
     {% endfor %}
@@ -187,8 +199,8 @@
       <div class="trust-label">Assessments Run</div>
     </article>
     <article class="trust-card reveal reveal-delay-2">
-      <div class="trust-value" data-count="4">0</div>
-      <div class="trust-label">Disease Models</div>
+      <div class="trust-value" data-count="5">0</div>
+      <div class="trust-label">Feature Modules</div>
     </article>
     <article class="trust-card reveal reveal-delay-3">
       <div class="trust-value" data-count="99">0</div>

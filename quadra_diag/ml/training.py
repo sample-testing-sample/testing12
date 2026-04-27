@@ -151,6 +151,12 @@ def ensure_models_ready() -> None:
     if not settings.model_auto_train:
         return
     for disease, spec in DISEASE_SPECS.items():
+        if spec.get("is_imaging_module"):
+            logger.info("Skipping imaging module %s during model initialization", disease)
+            continue
+        if "model_file" not in spec or "metadata_file" not in spec:
+            logger.warning("Skipping spec %s because it has no model metadata", disease)
+            continue
         model_path = settings.model_dir / spec["model_file"]
         metadata_path = settings.model_dir / spec["metadata_file"]
         if model_path.exists() and metadata_path.exists():

@@ -735,3 +735,46 @@ async def toggle_dark_mode(request: Request):
     request.session["dark_mode"] = not current
     return {"dark_mode": not current}
 
+
+@web_router.get("/mri", response_class=HTMLResponse)
+async def mri_interface(request: Request) -> HTMLResponse:
+    """
+    MRI Analysis Interface - loads NeuroTract integration
+    """
+    current_user = _get_current_user(request)
+    if not current_user:
+        push_flash(request, "Please sign in to use MRI Analysis.", "info")
+        return RedirectResponse(url="/login", status_code=303)
+
+    spec = DISEASE_SPECS.get("mri", {})
+    return _render(
+        request,
+        "mri.html",
+        spec=spec,
+        neurotract_backend="http://localhost:8001",
+        neurotract_frontend="http://localhost:3000",
+    )
+
+
+@web_router.get("/mri/proxy/{path:path}")
+async def mri_proxy(request: Request, path: str):
+    """
+    Proxy requests to NeuroTract API
+    """
+    current_user = _get_current_user(request)
+    if not current_user:
+        return JSONResponse({"error": "Unauthorized"}, status_code=401)
+
+    import httpx
+    
+    neurotract_api = "http://localhost:8001"
+    url = f"{neurotract_api}/{path}"
+    
+    async with httpx.AsyncClient() as client:
+        try:
+            response = await client.get(url, params=request.query_params)
+            return JSONResponse(response.json(), status_code=response.status_code)
+        except Exception as e:
+            logger.error(f"MRI proxy error: {e}")
+            return JSONResponse({"error": str(e)}, status_code=500)
+
